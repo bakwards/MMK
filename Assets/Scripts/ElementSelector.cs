@@ -32,7 +32,7 @@ public class ElementSelector : MonoBehaviour {
 	}
 
 	public void SetNew(Sprite n){
-		storyConstruct.ChangeElement(elementOrigin.sprite.name, n.name);
+		storyConstruct.ChangeElement(elementOrigin.gameObject.GetComponent<ClickStoryElement>().identifier, n.name);
 		elementNew = n;
 		elementOrigin.sprite = n;
 		storyConstruct.Play ();

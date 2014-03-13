@@ -95,18 +95,15 @@ public class StoryConstruct : MonoBehaviour {
 		pause = true;
 	}
 	public void Play(){
-		pause = false;
-	}
-
-	public void ChangeElement(string originalElement, string newElement){
-		int i = 0;
-		foreach(string old in characters){
-			if(old == originalElement){
-				characters[i] = newElement;
-				string audioPath = "Audio/" + storyName + "/Characters/" + newElement;
-				chars[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
-			}
-			i++;
+		if(!audioSource.isPlaying) {
+			audioSource.Play ();
 		}
+		pause = false;
+	} 
+
+	public void ChangeElement(int i, string newElement){
+		characters[i] = newElement;
+		string audioPath = "Audio/" + storyName + "/Characters/" + newElement;
+		chars[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
 	}
 }
