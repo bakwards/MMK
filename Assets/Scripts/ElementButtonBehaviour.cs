@@ -19,7 +19,7 @@ public class ElementButtonBehaviour : MonoBehaviour {
 
 	private void HandleStateChanged(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
 		if (e.State == Gesture.GestureState.Recognized)	{
-			elementSelector.GetComponent<ElementSelector>().SetNew(GetComponent<SpriteRenderer>().name);
+			elementSelector.GetComponent<ElementSelector>().SetNew(GetComponent<SpriteRenderer>().sprite);
 			elementSelector.SetActive(false);
 		}
 	}

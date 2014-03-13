@@ -3,6 +3,8 @@ using System.Collections;
 
 public class StoryConstruct : MonoBehaviour {
 
+	public string storyName;
+
 	public string[] characters;
 	public string[] objects;
 	public string[] locations;
@@ -18,6 +20,7 @@ public class StoryConstruct : MonoBehaviour {
 	private int segmentNum;
 	private int storyNum;
 
+	private bool pause = false;
 
 
 	// Use this for initialization
@@ -27,21 +30,21 @@ public class StoryConstruct : MonoBehaviour {
 		locs = new StoryElement[locations.Length];
 		int i = 0;
 		foreach(string c in characters){
-			string audioPath = "Audio/Kingdom/Characters/" + c;
+			string audioPath = "Audio/" + storyName + "/Characters/" + c;
 			chars[i] = new StoryElement();
 			chars[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
 			i++;
 		}
 		i = 0;
 		foreach(string l in locations){
-			string audioPath = "Audio/Kingdom/Locations/" + l;
+			string audioPath = "Audio/" + storyName + "/Locations/" + l;
 			locs[i] = new StoryElement();
 			locs[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
 			i++;
 		}
 		i = 0;
 		foreach(string o in objects){
-			string audioPath = "Audio/Kingdom/Things/" + o;
+			string audioPath = "Audio/" + storyName + "/Things/" + o;
 			objs[i] = new StoryElement();
 			objs[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
 			i++;
@@ -51,7 +54,7 @@ public class StoryConstruct : MonoBehaviour {
 		} else {
 			audioSource = gameObject.GetComponent<AudioSource>();
 		}
-		storyClips = Resources.LoadAll<AudioClip>("Audio/Kingdom/Story");
+		storyClips = Resources.LoadAll<AudioClip>("Audio/" + storyName + "/Story");
 		audioSource.clip = storyClips[0];
 		audioSource.Play();
 		segmentNum++;
@@ -59,7 +62,7 @@ public class StoryConstruct : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(!audioSource.isPlaying){
+		if(!audioSource.isPlaying && !pause){
 			NextClip();
 		}
 	}
@@ -86,5 +89,24 @@ public class StoryConstruct : MonoBehaviour {
 		nextSegment.title = audioSource.clip.name;
 		audioSource.Play();
 		segmentNum++;
+	}
+	
+	public void Pause(){
+		pause = true;
+	}
+	public void Play(){
+		pause = false;
+	}
+
+	public void ChangeElement(string originalElement, string newElement){
+		int i = 0;
+		foreach(string old in characters){
+			if(old == originalElement){
+				characters[i] = newElement;
+				string audioPath = "Audio/" + storyName + "/Characters/" + newElement;
+				chars[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
+			}
+			i++;
+		}
 	}
 }
