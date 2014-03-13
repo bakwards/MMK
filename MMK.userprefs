@@ -1,14 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\ElementSelector.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\StoryConstruct.cs">
     <Files>
-      <File FileName="Assets\Scripts\StoryConstruct.cs" Line="56" Column="69" />
-      <File FileName="Assets\Scripts\StoryConstruct.cs" Line="56" Column="69" />
+      <File FileName="Assets\Scripts\StoryConstruct.cs" Line="95" Column="34" />
       <File FileName="Assets\Scripts\StoryElement.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\StorySegment.cs" Line="1" Column="1" />
-      <File FileName="Assets\Editor\ChangeAudioImportSettings.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\ClickStoryElement.cs" Line="20" Column="52" />
-      <File FileName="Assets\ElementSelector.cs" Line="6" Column="31" />
+      <File FileName="Assets\Scripts\ClickStoryElement.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\ElementSelector.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\ElementButtonBehaviour.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\StorySegment.cs" Line="3" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
