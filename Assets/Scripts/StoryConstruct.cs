@@ -63,7 +63,7 @@ public class StoryConstruct : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(!audioSource.isPlaying && !pause && segmentNum < storyClips.Length){
+		if(!audioSource.isPlaying && !pause && segmentNum < storySegments.Length){
 			NextClip();
 		}
 	}
@@ -112,5 +112,24 @@ public class StoryConstruct : MonoBehaviour {
 		characters[i] = newElement;
 		string audioPath = "Audio/" + storyName + "/Characters/" + newElement;
 		chars[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
+	}
+	
+	public void HardPausePlay(){
+		pause = !pause;
+		if(pause){
+			audioSource.Pause();
+		} else {
+			audioSource.Play();
+		}
+	}
+
+	public void RestartStory(){
+		currentPage = 0;
+		firstStoryOnPage = 0;
+		storyNum = 0;
+		segmentNum = 0;
+		audioSource.Stop();
+		pause = false;
+		NextClip();
 	}
 }
