@@ -7,23 +7,41 @@ public class ElementSelector : MonoBehaviour {
 	private Sprite elementNew;
 	public StoryConstruct storyConstruct;
 	private Sprite[] characterSprites;
+	private Sprite[] locationSprites;
+	private Sprite[] objectSprites;
 	private SpriteRenderer[] selectorButtons;
 
 	void Start(){
 		characterSprites = Resources.LoadAll<Sprite>("Sprites/Characters");
+		locationSprites = Resources.LoadAll<Sprite>("Sprites/Locations");
+		objectSprites = Resources.LoadAll<Sprite>("Sprites/Objects");
 		selectorButtons = transform.GetComponentsInChildren<SpriteRenderer>();
 		gameObject.SetActive(false);
 	}
 
 	public void SetOrigin(SpriteRenderer s){
-		characterSprites = RandomizeArray(characterSprites);
+		Sprite[] spriteSet;
+		switch(s.gameObject.transform.parent.name){
+		case "Characters":
+			spriteSet = characterSprites;
+			break;
+		case "Locations":
+			spriteSet = locationSprites;
+			break;
+		case "Objects":
+			spriteSet = objectSprites;
+			break;
+		default:
+			break;
+		}
+		spriteSet = RandomizeArray(characterSprites);
 		elementOrigin = s;
 		int i = 0;
 		foreach(SpriteRenderer button in selectorButtons){
-			if(characterSprites[i].name == elementOrigin.sprite.name){
+			if(spriteSet[i].name == elementOrigin.sprite.name){
 				i++;
 			}
-			button.sprite = characterSprites[i];
+			button.sprite = spriteSet[i];
 			if(i < selectorButtons.Length){
 				i++;
 			}
@@ -32,7 +50,7 @@ public class ElementSelector : MonoBehaviour {
 	}
 
 	public void SetNew(Sprite n){
-		storyConstruct.ChangeElement(elementOrigin.gameObject.GetComponent<ClickStoryElement>().identifier, n.name);
+		storyConstruct.ChangeElement(elementOrigin.gameObject.GetComponent<ClickStoryElement>().identifier, n.name, elementOrigin.gameObject.transform.parent.name);
 		elementNew = n;
 		elementOrigin.sprite = n;
 		storyConstruct.Play ();

@@ -7,7 +7,6 @@ public class ClickStoryElement : MonoBehaviour {
 	public GameObject elementSelector;
 	public int identifier;
 
-	// Use this for initialization
 	void Start () {
 		GetComponent<PressGesture>().StateChanged += HandleStateChanged;
 	}

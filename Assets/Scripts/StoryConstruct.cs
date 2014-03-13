@@ -108,10 +108,24 @@ public class StoryConstruct : MonoBehaviour {
 		pause = false;
 	} 
 
-	public void ChangeElement(int i, string newElement){
-		characters[i] = newElement;
-		string audioPath = "Audio/" + storyName + "/Characters/" + newElement;
-		chars[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
+	public void ChangeElement(int i, string newElement, string type){ //change element, not character - take sprite parent name as argument
+		string audioPath = "Audio/" + storyName + "/" + type + "/" + newElement;
+		switch (type) {
+		case "Characters":
+			chars[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
+			characters[i] = newElement;
+			break;
+		case "Locations":
+			locs[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
+			locations[i] = newElement;
+			break;
+		case "Objects":
+			objs[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
+			objects[i] = newElement;
+			break;
+		default:
+			break;
+		}
 	}
 	
 	public void HardPausePlay(){
