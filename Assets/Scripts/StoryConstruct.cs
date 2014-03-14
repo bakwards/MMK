@@ -59,7 +59,7 @@ public class StoryConstruct : MonoBehaviour {
 			audioSource = gameObject.GetComponent<AudioSource>();
 		}
 		storyClips = Resources.LoadAll<AudioClip>("Audio/" + storyName + "/Story");
-		NextClip();
+		gameObject.SetActive(false);
 	}
 	
 	// Update is called once per frame
