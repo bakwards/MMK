@@ -16,14 +16,15 @@ public class StoryConstruct : MonoBehaviour {
 	public StorySegment[] storySegments;
 	public int[] pageSegmentStart;
 	private int currentPage;
-	private int firstStoryOnPage;
+	public int firstStoryOnPage;
 
 	private AudioClip[] storyClips;
 	private AudioSource audioSource;
 	private int segmentNum;
-	private int storyNum;
+	public int storyNum;
 
 	private bool pause = false;
+	public bool lookingForFirstStory = true;
 
 
 	// Use this for initialization
@@ -69,9 +70,17 @@ public class StoryConstruct : MonoBehaviour {
 	}
 
 	void NextClip(){
+		if(currentPage < pageSegmentStart.Length && segmentNum >= pageSegmentStart[currentPage+1]){
+			currentPage++;
+			lookingForFirstStory = true;
+		}
 		StorySegment nextSegment = storySegments[segmentNum];
 		switch(nextSegment.type){
 		case StorySegment.ElementType.Story:
+			if(lookingForFirstStory){
+				firstStoryOnPage = storyNum;
+				lookingForFirstStory = false;
+			}
 			audioSource.clip = storyClips[storyNum];
 			storyNum++;
 			break;
@@ -90,10 +99,6 @@ public class StoryConstruct : MonoBehaviour {
 		nextSegment.title = audioSource.clip.name;
 		audioSource.Play();
 		segmentNum++;
-		if(currentPage < pageSegmentStart.Length && segmentNum > pageSegmentStart[currentPage+1]){
-			currentPage++;
-			firstStoryOnPage = storyNum-1;
-		}
 	}
 	
 	public void Pause(){
@@ -102,7 +107,9 @@ public class StoryConstruct : MonoBehaviour {
 	public void Play(){
 		if(!audioSource.isPlaying) {
 			segmentNum = pageSegmentStart[currentPage];
-			storyNum = firstStoryOnPage;
+			if(!lookingForFirstStory){
+				storyNum = firstStoryOnPage;
+			}
 			NextClip();
 		}
 		pause = false;
