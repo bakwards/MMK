@@ -9,8 +9,9 @@ public class CameraControl : MonoBehaviour {
 	private Vector2 lastPanPosition;
 	private SmoothFollow smoothFollow;
 	public float maxCamHeight = 3;
-	public float minCamHeight = 1;
-	public float maxDistance = 5;
+	public float minDistance = 2;
+	public float maxDistance = 6;
+	public float camDistanceTreshold = 3;
 	
 	void Start () {
 		GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChanged;
@@ -37,12 +38,13 @@ public class CameraControl : MonoBehaviour {
 	}
 	private void HandleScaleStateChanged(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
 		SimpleScaleGesture gesture = sender as SimpleScaleGesture;
-		Debug.Log("smoothfollowheight1: " + smoothFollow.height);
-		smoothFollow.height /= gesture.LocalDeltaScale;
-		Debug.Log("smoothfollowheight2: " + smoothFollow.height);
-		smoothFollow.height = Mathf.Clamp (smoothFollow.height, minCamHeight, maxCamHeight);
-		Debug.Log("smoothfollowheight3: " + smoothFollow.height);
-		smoothFollow.distance = maxDistance * smoothFollow.height / maxCamHeight;
+		smoothFollow.distance /= gesture.LocalDeltaScale;
+		smoothFollow.distance = Mathf.Clamp (smoothFollow.distance, minDistance, maxDistance);
+		if(smoothFollow.distance > camDistanceTreshold){
+			smoothFollow.height = maxCamHeight * smoothFollow.distance / maxDistance;
+		} else {
+			smoothFollow.height = 0.1f;
+		}
 	}
 
 }
