@@ -14,13 +14,13 @@ public class ElementSelector : MonoBehaviour {
 	void Start(){
 		characterSprites = Resources.LoadAll<Sprite>("Sprites/Characters");
 		locationSprites = Resources.LoadAll<Sprite>("Sprites/Locations");
-		objectSprites = Resources.LoadAll<Sprite>("Sprites/Objects");
+		objectSprites = Resources.LoadAll<Sprite>("Sprites/Things");
 		selectorButtons = transform.GetComponentsInChildren<SpriteRenderer>();
 		gameObject.SetActive(false);
 	}
 
 	public void SetOrigin(SpriteRenderer s){
-		Sprite[] spriteSet;
+		Sprite[] spriteSet = new Sprite[0];
 		switch(s.gameObject.transform.parent.name){
 		case "Characters":
 			spriteSet = characterSprites;
@@ -34,16 +34,22 @@ public class ElementSelector : MonoBehaviour {
 		default:
 			break;
 		}
-		spriteSet = RandomizeArray(characterSprites);
+		spriteSet = RandomizeArray(spriteSet);
 		elementOrigin = s;
 		int i = 0;
+		int adjustForCopy = 1;
 		foreach(SpriteRenderer button in selectorButtons){
-			if(spriteSet[i].name == elementOrigin.sprite.name){
-				i++;
-			}
-			button.sprite = spriteSet[i];
-			if(i < selectorButtons.Length){
-				i++;
+			button.gameObject.SetActive(false);
+			if(spriteSet.Length-adjustForCopy > i){
+				button.gameObject.SetActive(true);
+				if(spriteSet[i].name == elementOrigin.sprite.name){
+					i++;
+					adjustForCopy = 0;
+				}
+				button.sprite = spriteSet[i];
+				if(i < selectorButtons.Length){
+					i++;
+				}
 			}
 		}
 		storyConstruct.Pause();

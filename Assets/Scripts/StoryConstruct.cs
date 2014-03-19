@@ -16,7 +16,8 @@ public class StoryConstruct : MonoBehaviour {
 	private StoryElement[] locs;
 
 	public StorySegment[] storySegments;
-	public int[] pageSegmentStart;
+	public PageSegment[] pageSegments;
+	//public int[] pageSegmentStart;
 	private int currentPage;
 	public int firstStoryOnPage;
 
@@ -72,7 +73,7 @@ public class StoryConstruct : MonoBehaviour {
 	}
 
 	void NextClip(){
-		if(currentPage < pageSegmentStart.Length && segmentNum >= pageSegmentStart[currentPage+1]){
+		if(currentPage < pageSegments.Length && segmentNum >= pageSegments[currentPage+1].pageSegmentStart){
 			currentPage++;
 			lookingForFirstStory = true;
 		}
@@ -108,7 +109,7 @@ public class StoryConstruct : MonoBehaviour {
 	}
 	public void Play(){
 		if(!audioSource.isPlaying) {
-			segmentNum = pageSegmentStart[currentPage];
+			segmentNum = pageSegments[currentPage].pageSegmentStart;
 			if(!lookingForFirstStory){
 				storyNum = firstStoryOnPage;
 			}
@@ -116,6 +117,15 @@ public class StoryConstruct : MonoBehaviour {
 		}
 		pause = false;
 	} 
+	
+	public void HardPausePlay(){
+		pause = !pause;
+		if(pause){
+			audioSource.Pause();
+		} else {
+			audioSource.Play();
+		}
+	}
 
 	public void ChangeElement(int i, string newElement, string type){ //change element, not character - take sprite parent name as argument
 		string audioPath = "Audio/" + storyName + "/" + type + "/" + newElement;
@@ -128,21 +138,12 @@ public class StoryConstruct : MonoBehaviour {
 			locs[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
 			locations[i] = newElement;
 			break;
-		case "Objects":
+		case "Things":
 			objs[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
 			objects[i] = newElement;
 			break;
 		default:
 			break;
-		}
-	}
-	
-	public void HardPausePlay(){
-		pause = !pause;
-		if(pause){
-			audioSource.Pause();
-		} else {
-			audioSource.Play();
 		}
 	}
 
