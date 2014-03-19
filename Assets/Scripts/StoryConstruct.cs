@@ -3,6 +3,8 @@ using System.Collections;
 
 public class StoryConstruct : MonoBehaviour {
 
+	public bool debugActive;
+
 	public string storyName;
 
 	public string[] characters;
@@ -59,7 +61,7 @@ public class StoryConstruct : MonoBehaviour {
 			audioSource = gameObject.GetComponent<AudioSource>();
 		}
 		storyClips = Resources.LoadAll<AudioClip>("Audio/" + storyName + "/Story");
-		gameObject.SetActive(false);
+		gameObject.SetActive(debugActive);
 	}
 	
 	// Update is called once per frame

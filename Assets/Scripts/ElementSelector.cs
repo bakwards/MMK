@@ -28,7 +28,7 @@ public class ElementSelector : MonoBehaviour {
 		case "Locations":
 			spriteSet = locationSprites;
 			break;
-		case "Objects":
+		case "Things":
 			spriteSet = objectSprites;
 			break;
 		default:
