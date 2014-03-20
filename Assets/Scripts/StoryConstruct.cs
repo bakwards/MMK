@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using tk2dRuntime;
 
 public class StoryConstruct : MonoBehaviour {
 
@@ -14,6 +15,10 @@ public class StoryConstruct : MonoBehaviour {
 	private StoryElement[] chars;
 	private StoryElement[] objs;
 	private StoryElement[] locs;
+	
+	private ClickStoryElement[] characterGraphics;
+	private ClickStoryElement[] locationGraphics;
+	private ClickStoryElement[] thingGraphics;
 
 	public StorySegment[] storySegments;
 	public PageSegment[] pageSegments;
@@ -28,10 +33,16 @@ public class StoryConstruct : MonoBehaviour {
 
 	private bool pause = false;
 	public bool lookingForFirstStory = true;
+	public tk2dTextMesh textMesh;
 
 
 	// Use this for initialization
 	void Start () {
+		Transform storyGraphics = transform.FindChild("StoryGraphics").transform;
+		characterGraphics = storyGraphics.FindChild("Characters").transform.GetComponentsInChildren<ClickStoryElement>() as ClickStoryElement[];
+		locationGraphics = storyGraphics.FindChild("Locations").transform.GetComponentsInChildren<ClickStoryElement>() as ClickStoryElement[];
+		thingGraphics = storyGraphics.FindChild("Things").transform.GetComponentsInChildren<ClickStoryElement>() as ClickStoryElement[];
+		GeneratePageContent();
 		chars = new StoryElement[characters.Length];
 		objs = new StoryElement[objects.Length];
 		locs = new StoryElement[locations.Length];
@@ -63,6 +74,8 @@ public class StoryConstruct : MonoBehaviour {
 		}
 		storyClips = Resources.LoadAll<AudioClip>("Audio/" + storyName + "/Story");
 		gameObject.SetActive(debugActive);
+		UpdatePage(pageSegments[currentPage]);
+		GeneratePageContent();
 	}
 	
 	// Update is called once per frame
@@ -73,8 +86,11 @@ public class StoryConstruct : MonoBehaviour {
 	}
 
 	void NextClip(){
-		if(currentPage < pageSegments.Length && segmentNum >= pageSegments[currentPage+1].pageSegmentStart){
+		print (segmentNum);
+		if(currentPage+1 < pageSegments.Length && segmentNum >= pageSegments[currentPage+1].pageSegmentStart){
 			currentPage++;
+			UpdatePage(pageSegments[currentPage]);
+			GeneratePageContent();
 			lookingForFirstStory = true;
 		}
 		StorySegment nextSegment = storySegments[segmentNum];
@@ -115,6 +131,7 @@ public class StoryConstruct : MonoBehaviour {
 			}
 			NextClip();
 		}
+		UpdatePage(pageSegments[currentPage]);
 		pause = false;
 	} 
 	
@@ -147,6 +164,47 @@ public class StoryConstruct : MonoBehaviour {
 		}
 	}
 
+	void UpdatePage(PageSegment page){
+		string newString = page.pageText;
+		foreach(int c in page.characters){
+			string stringCheck = "C"+c;
+			newString = newString.Replace(stringCheck, characters[c]);
+		}
+		foreach(int t in page.things){
+			string stringCheck = "T"+t;
+			newString = newString.Replace(stringCheck, objects[t]);
+		}
+		newString = newString.Replace("L"+page.location, locations[page.location]);
+		//Debug.Log (newString);
+		textMesh.text = newString;
+	}
+
+	void GeneratePageContent(){
+		//get children from transform, iterate their id content, activate all and deactivate those not on page.
+		foreach(ClickStoryElement c in characterGraphics){
+			c.gameObject.SetActive(false);
+			foreach(int i in pageSegments[currentPage].characters){
+				if(i == c.identifier){
+					c.gameObject.SetActive(true);
+				}
+			}
+		}
+		foreach(ClickStoryElement l in locationGraphics){
+			l.gameObject.SetActive(false);
+			if(pageSegments[currentPage].location == l.identifier){
+				l.gameObject.SetActive(true);
+			}
+		}
+		foreach(ClickStoryElement t in thingGraphics){
+			t.gameObject.SetActive(false);
+			foreach(int i in pageSegments[currentPage].things){
+				if(i == t.identifier){
+					t.gameObject.SetActive(true);
+				}
+			}
+		}
+	}
+
 	public void RestartStory(){
 		currentPage = 0;
 		firstStoryOnPage = 0;
@@ -155,5 +213,7 @@ public class StoryConstruct : MonoBehaviour {
 		audioSource.Stop();
 		pause = false;
 		NextClip();
+		GeneratePageContent();
+		UpdatePage(pageSegments[0]);
 	}
 }
