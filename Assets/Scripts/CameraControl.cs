@@ -39,6 +39,12 @@ public class CameraControl : MonoBehaviour {
 			}
 		}
 	}
+	private void HandlePanStateChangedSearch(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
+		if(controlTarget != null){
+
+		}
+	}
+
 	private void HandleScaleStateChanged(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
 		SimpleScaleGesture gesture = sender as SimpleScaleGesture;
 		smoothFollow.distance /= gesture.LocalDeltaScale;
@@ -47,11 +53,16 @@ public class CameraControl : MonoBehaviour {
 			smoothFollow.height = maxCamHeight * smoothFollow.distance / maxDistance;
 			if(fullscreenTarget.Type == FullscreenTarget.TargetType.Background){
 				fullscreenTarget.Type = FullscreenTarget.TargetType.Foreground;
+				GetComponent<SimplePanGesture>().StateChanged -= HandlePanStateChangedSearch;
+				GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChanged;
 			}
 		} else {
 			smoothFollow.height = 0.1f;
 			if(fullscreenTarget.Type == FullscreenTarget.TargetType.Foreground){
 				fullscreenTarget.Type = FullscreenTarget.TargetType.Background;
+				controlTarget.MoveRotation(Quaternion.Euler(0,100,0));
+				GetComponent<SimplePanGesture>().StateChanged -= HandlePanStateChanged;
+				GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChangedSearch;
 			}
 		}
 	}
