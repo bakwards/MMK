@@ -60,7 +60,7 @@ public class CameraControl : MonoBehaviour {
 			smoothFollow.height = 0.1f;
 			if(fullscreenTarget.Type == FullscreenTarget.TargetType.Foreground){
 				fullscreenTarget.Type = FullscreenTarget.TargetType.Background;
-				controlTarget.MoveRotation(Quaternion.Euler(0,100,0));
+				controlTarget.MoveRotation(Quaternion.Euler(0,75,0));
 				GetComponent<SimplePanGesture>().StateChanged -= HandlePanStateChanged;
 				GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChangedSearch;
 			}
