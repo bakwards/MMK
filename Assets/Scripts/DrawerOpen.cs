@@ -31,13 +31,12 @@ public class DrawerOpen : MonoBehaviour {
 			lastDrawPosition = gesture.ScreenPosition;
 		}
 		if(!float.IsNaN(deltaPosition)){
-			if(deltaPosition < 0 && transform.localPosition.z > minOpenPosition ||
-			   deltaPosition > 0 && transform.localPosition.z < minOpenPosition+maxOpenDistance){
-				deltaPosition /= 100;
-				deltaPosition = Mathf.Clamp(deltaPosition, minOpenPosition-transform.localPosition.z, minOpenPosition+maxOpenDistance-transform.localPosition.z);
-				Vector3 newPosition = transform.position + transform.forward*deltaPosition;
-				rigidbody.MovePosition(newPosition);
-			}
+			deltaPosition *= 0.01f*Vector3.Dot(transform.right, transform.position-Camera.main.transform.position);
+			deltaPosition = Mathf.Clamp(deltaPosition,
+		                            minOpenPosition-transform.localPosition.z,
+		                            minOpenPosition+maxOpenDistance-transform.localPosition.z);
+			Vector3 newPosition = transform.position + transform.forward*deltaPosition;
+			rigidbody.MovePosition(newPosition);
 		}
 		if (e.State == Gesture.GestureState.Recognized)	{
 		}

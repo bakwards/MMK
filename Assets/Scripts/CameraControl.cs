@@ -14,8 +14,15 @@ public class CameraControl : MonoBehaviour {
 	public float maxDistance = 6;
 	public float camDistanceTreshold = 3;
 	public FullscreenTarget fullscreenTarget;
+
+	public float maxHeightMove;
+	public float minHeightMove;
+	public float maxSideMove=1;
+
+	private Vector3 controlOriginalPosition;
 	
 	void Start () {
+		controlOriginalPosition = controlTarget.transform.position;
 		GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChanged;
 		GetComponent<SimpleScaleGesture>().StateChanged += HandleScaleStateChanged;
 		if(smoothFollow == null){
@@ -41,7 +48,20 @@ public class CameraControl : MonoBehaviour {
 	}
 	private void HandlePanStateChangedSearch(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
 		if(controlTarget != null){
-
+			Vector2 deltaPosition = new Vector2(0,0);
+			SimplePanGesture gesture = sender as SimplePanGesture;
+			if(e.State == Gesture.GestureState.Began){
+				lastPanPosition = gesture.ScreenPosition;
+			} else {
+				deltaPosition = gesture.ScreenPosition - lastPanPosition;
+				lastPanPosition = gesture.ScreenPosition;
+			}
+			if(!float.IsNaN(deltaPosition.x)){
+				deltaPosition *= -0.005f;
+				deltaPosition.x = Mathf.Clamp(deltaPosition.x, -maxSideMove-controlTarget.transform.localPosition.x, maxSideMove-controlTarget.transform.localPosition.x);
+				deltaPosition.y = Mathf.Clamp(deltaPosition.y, minHeightMove-controlTarget.transform.localPosition.y, maxHeightMove-controlTarget.transform.localPosition.y); 
+				controlTarget.MovePosition(controlTarget.transform.position+controlTarget.transform.up*deltaPosition.y+controlTarget.transform.right*deltaPosition.x);
+			}
 		}
 	}
 
@@ -53,6 +73,7 @@ public class CameraControl : MonoBehaviour {
 			smoothFollow.height = maxCamHeight * smoothFollow.distance / maxDistance;
 			if(fullscreenTarget.Type == FullscreenTarget.TargetType.Background){
 				fullscreenTarget.Type = FullscreenTarget.TargetType.Foreground;
+				controlTarget.MovePosition(controlOriginalPosition);
 				GetComponent<SimplePanGesture>().StateChanged -= HandlePanStateChangedSearch;
 				GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChanged;
 			}
@@ -60,7 +81,7 @@ public class CameraControl : MonoBehaviour {
 			smoothFollow.height = 0.1f;
 			if(fullscreenTarget.Type == FullscreenTarget.TargetType.Foreground){
 				fullscreenTarget.Type = FullscreenTarget.TargetType.Background;
-				controlTarget.MoveRotation(Quaternion.Euler(0,75,0));
+				controlTarget.MoveRotation(Quaternion.Euler(0,85,0));
 				GetComponent<SimplePanGesture>().StateChanged -= HandlePanStateChanged;
 				GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChangedSearch;
 			}
