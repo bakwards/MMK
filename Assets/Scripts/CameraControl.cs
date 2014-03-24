@@ -14,6 +14,7 @@ public class CameraControl : MonoBehaviour {
 	public float maxDistance = 6;
 	public float camDistanceTreshold = 3;
 	public FullscreenTarget fullscreenTarget;
+	public Collider commodeCollider;
 
 	public float maxHeightMove;
 	public float minHeightMove;
@@ -25,6 +26,7 @@ public class CameraControl : MonoBehaviour {
 		controlOriginalPosition = controlTarget.transform.position;
 		GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChanged;
 		GetComponent<SimpleScaleGesture>().StateChanged += HandleScaleStateChanged;
+		GetComponent<TapGesture>().StateChanged += HandleTapStateChanged;
 		if(smoothFollow == null){
 			smoothFollow = GetComponent<SmoothFollow>();
 		}
@@ -72,18 +74,27 @@ public class CameraControl : MonoBehaviour {
 		if(smoothFollow.distance > camDistanceTreshold){
 			smoothFollow.height = maxCamHeight * smoothFollow.distance / maxDistance;
 			if(fullscreenTarget.Type == FullscreenTarget.TargetType.Background){
-				fullscreenTarget.Type = FullscreenTarget.TargetType.Foreground;
-				controlTarget.MovePosition(controlOriginalPosition);
-				GetComponent<SimplePanGesture>().StateChanged -= HandlePanStateChangedSearch;
-				GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChanged;
+				ZoomOut();
 			}
 		} else {
 			smoothFollow.height = 0.1f;
 			if(fullscreenTarget.Type == FullscreenTarget.TargetType.Foreground){
-				fullscreenTarget.Type = FullscreenTarget.TargetType.Background;
-				controlTarget.MoveRotation(Quaternion.Euler(0,85,0));
-				GetComponent<SimplePanGesture>().StateChanged -= HandlePanStateChanged;
-				GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChangedSearch;
+				ZoomIn();
+			}
+		}
+	}
+	private void HandleTapStateChanged(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
+		if(e.State == Gesture.GestureState.Recognized){
+			TapGesture gesture = sender as TapGesture;
+			RaycastHit hit;
+			Ray ray = Camera.main.ScreenPointToRay(gesture.ScreenPosition);
+			if(Physics.Raycast(ray, out hit)){
+				if(hit.collider != null && hit.collider.name == "CommodeBlend"){
+					smoothFollow.height = 0.1f;
+					smoothFollow.distance = minDistance;
+					controlTarget.MovePosition(hit.point);
+					ZoomIn();
+				}
 			}
 		}
 	}
@@ -99,4 +110,20 @@ public class CameraControl : MonoBehaviour {
 
 	}
 
+	void ZoomIn(){
+		GetComponent<TapGesture>().StateChanged -= HandleTapStateChanged;
+		fullscreenTarget.Type = FullscreenTarget.TargetType.Background;
+		controlTarget.MoveRotation(Quaternion.Euler(0,85,0));
+		GetComponent<SimplePanGesture>().StateChanged -= HandlePanStateChanged;
+		GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChangedSearch;
+		commodeCollider.enabled = false;
+	}
+	void ZoomOut(){
+		GetComponent<TapGesture>().StateChanged += HandleTapStateChanged;
+		fullscreenTarget.Type = FullscreenTarget.TargetType.Foreground;
+		controlTarget.MovePosition(controlOriginalPosition);
+		GetComponent<SimplePanGesture>().StateChanged -= HandlePanStateChangedSearch;
+		GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChanged;
+		commodeCollider.enabled = true;
+	}
 }

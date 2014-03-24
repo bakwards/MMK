@@ -40,6 +40,7 @@ public class DrawerOpen : MonoBehaviour {
 			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.01 && transform.FindChild("StoryController")){
 				transform.FindChild("StoryController").gameObject.SetActive(true);
 				Camera.main.GetComponent<CameraControl>().SetNewTarget(transform.FindChild("StoryController").gameObject);
+				transform.FindChild("StoryController").parent = null;
 			}
 		}
 		if (e.State == Gesture.GestureState.Recognized)	{
