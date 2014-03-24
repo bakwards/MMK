@@ -60,9 +60,9 @@ public class CameraControl : MonoBehaviour {
 			}
 			if(!float.IsNaN(deltaPosition.x)){
 				deltaPosition *= -0.005f;
-				deltaPosition.x = Mathf.Clamp(deltaPosition.x, -maxSideMove-controlTarget.transform.localPosition.x, maxSideMove-controlTarget.transform.localPosition.x);
+				deltaPosition.x = Mathf.Clamp(-deltaPosition.x, -maxSideMove-controlTarget.transform.localPosition.x, maxSideMove-controlTarget.transform.localPosition.x);
 				deltaPosition.y = Mathf.Clamp(deltaPosition.y, minHeightMove-controlTarget.transform.localPosition.y, maxHeightMove-controlTarget.transform.localPosition.y); 
-				controlTarget.MovePosition(controlTarget.transform.position+controlTarget.transform.up*deltaPosition.y+controlTarget.transform.right*deltaPosition.x);
+				controlTarget.MovePosition(controlTarget.transform.position+controlTarget.transform.up*deltaPosition.y + commodeCollider.transform.right*deltaPosition.x);
 			}
 		}
 	}

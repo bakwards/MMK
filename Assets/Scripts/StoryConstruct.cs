@@ -86,7 +86,6 @@ public class StoryConstruct : MonoBehaviour {
 	}
 
 	void NextClip(){
-		print (segmentNum);
 		if(currentPage+1 < pageSegments.Length && segmentNum >= pageSegments[currentPage+1].pageSegmentStart){
 			currentPage++;
 			UpdatePage(pageSegments[currentPage]);
