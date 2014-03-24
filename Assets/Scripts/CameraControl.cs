@@ -95,7 +95,6 @@ public class CameraControl : MonoBehaviour {
 					RaycastHit bounceHit;
 					Ray bounceRay = new Ray(hit.point, -hit.collider.transform.forward);
 					if(Physics.Raycast(bounceRay, out bounceHit)){
-						Debug.Log ("Hit somehing else!" + bounceHit.collider.name);
 						controlTarget.MovePosition(bounceHit.point);
 					}
 					smoothFollow.height = 0.1f;

@@ -48,7 +48,7 @@ public class DrawerOpen : MonoBehaviour {
 				transform.FindChild("StoryController").parent = null;
 			}
 			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.01 && locked && !AudioController.Instance.mainAudioSource.isPlaying){
-				AudioController.Instance.PlaySound();
+				//AudioController.Instance.PlaySound();
 			}
 		}
 		if (e.State == Gesture.GestureState.Recognized)	{
