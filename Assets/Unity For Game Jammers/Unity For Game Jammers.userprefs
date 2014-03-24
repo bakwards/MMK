@@ -1,0 +1,16 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\SingletonPattern\Scripts\AudioController.cs">
+    <Files>
+      <File FileName="Assets\Combo\Scripts\GameController.cs" Line="10" Column="2" />
+      <File FileName="Assets\StatePattern\Scripts\StateManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\StatePattern\Scripts\State.cs" Line="11" Column="2" />
+      <File FileName="Assets\StatePattern\Scripts\PlayingState.cs" Line="1" Column="1" />
+      <File FileName="Assets\SingletonPattern\Scripts\AudioController.cs" Line="8" Column="43" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

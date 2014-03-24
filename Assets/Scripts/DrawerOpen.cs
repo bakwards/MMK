@@ -12,7 +12,7 @@ public class DrawerOpen : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if(locked) { maxOpenDistance = 0.01f;}
+		if(locked) { maxOpenDistance = 0.02f;}
 		minOpenPosition = transform.localPosition.z;
 		GetComponent<PressGesture>().StateChanged += HandleStateChanged;
 		GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChanged;
@@ -46,6 +46,9 @@ public class DrawerOpen : MonoBehaviour {
 				transform.FindChild("StoryController").gameObject.SetActive(true);
 				Camera.main.GetComponent<CameraControl>().SetNewTarget(transform.FindChild("StoryController").gameObject);
 				transform.FindChild("StoryController").parent = null;
+			}
+			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.01 && locked && !AudioController.Instance.mainAudioSource.isPlaying){
+				AudioController.Instance.PlaySound();
 			}
 		}
 		if (e.State == Gesture.GestureState.Recognized)	{
