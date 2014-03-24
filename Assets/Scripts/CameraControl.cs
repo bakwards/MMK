@@ -88,4 +88,15 @@ public class CameraControl : MonoBehaviour {
 		}
 	}
 
+	public void SetNewTarget(GameObject target){
+		controlTarget.MovePosition(target.transform.position-Vector3.up*0.16f);
+		controlTarget.MoveRotation(target.transform.rotation);
+		smoothFollow.height = 0.2f;
+		smoothFollow.distance = 1.2f;
+		GetComponent<SimplePanGesture>().StateChanged -= HandlePanStateChanged;
+		GetComponent<SimplePanGesture>().StateChanged -= HandlePanStateChangedSearch;
+		GetComponent<SimpleScaleGesture>().StateChanged -= HandleScaleStateChanged;
+
+	}
+
 }

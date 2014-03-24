@@ -12,7 +12,7 @@ public class RestartButton : MonoBehaviour {
 	
 	private void HandleStateChanged(object sender, TouchScript.Events.GestureStateChangeEventArgs e){		
 		if (e.State == Gesture.GestureState.Recognized)	{
-			storyConstruct.RestartStory();
+			Application.LoadLevel(0);
 		}
 	}
 }

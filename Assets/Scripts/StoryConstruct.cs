@@ -124,13 +124,13 @@ public class StoryConstruct : MonoBehaviour {
 		pause = true;
 	}
 	public void Play(){
-		if(!audioSource.isPlaying) {
+		//if(!audioSource.isPlaying) {
 			segmentNum = pageSegments[currentPage].pageSegmentStart;
 			if(!lookingForFirstStory){
 				storyNum = firstStoryOnPage;
 			}
 			NextClip();
-		}
+		//}
 		UpdatePage(pageSegments[currentPage]);
 		pause = false;
 	} 
