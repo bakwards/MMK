@@ -15,6 +15,7 @@ public class CameraControl : MonoBehaviour {
 	public float camDistanceTreshold = 3;
 	public FullscreenTarget fullscreenTarget;
 	public Collider commodeCollider;
+	public GameObject bounceObject;
 
 	public float maxHeightMove;
 	public float minHeightMove;
@@ -89,13 +90,26 @@ public class CameraControl : MonoBehaviour {
 			RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay(gesture.ScreenPosition);
 			if(Physics.Raycast(ray, out hit)){
-				if(hit.collider != null && hit.collider.name == "CommodeBlend"){
+				if(hit.collider != null && hit.collider.name == "BounceObject"){
+					bounceObject.SetActive(false);
+					RaycastHit bounceHit;
+					Ray bounceRay = new Ray(hit.point, -hit.collider.transform.forward);
+					if(Physics.Raycast(bounceRay, out bounceHit)){
+						Debug.Log ("Hit somehing else!" + bounceHit.collider.name);
+						controlTarget.MovePosition(bounceHit.point);
+					}
 					smoothFollow.height = 0.1f;
 					smoothFollow.distance = minDistance;
-					controlTarget.MovePosition(hit.point);
+					//controlTarget.MovePosition(hit.point);
 					ZoomIn();
 				}
 			}
+		}
+	}
+	private void HandleTapStateChangedOut(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
+		if(e.State == Gesture.GestureState.Recognized){
+			smoothFollow.distance = maxDistance;
+			ZoomOut();
 		}
 	}
 
@@ -112,18 +126,22 @@ public class CameraControl : MonoBehaviour {
 
 	void ZoomIn(){
 		GetComponent<TapGesture>().StateChanged -= HandleTapStateChanged;
+		GetComponent<TapGesture>().StateChanged += HandleTapStateChangedOut;
 		fullscreenTarget.Type = FullscreenTarget.TargetType.Background;
 		controlTarget.MoveRotation(Quaternion.Euler(0,85,0));
 		GetComponent<SimplePanGesture>().StateChanged -= HandlePanStateChanged;
 		GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChangedSearch;
 		commodeCollider.enabled = false;
+		bounceObject.SetActive(false);
 	}
 	void ZoomOut(){
+		GetComponent<TapGesture>().StateChanged -= HandleTapStateChangedOut;
 		GetComponent<TapGesture>().StateChanged += HandleTapStateChanged;
 		fullscreenTarget.Type = FullscreenTarget.TargetType.Foreground;
 		controlTarget.MovePosition(controlOriginalPosition);
 		GetComponent<SimplePanGesture>().StateChanged -= HandlePanStateChangedSearch;
 		GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChanged;
 		commodeCollider.enabled = true;
+		bounceObject.SetActive(true);
 	}
 }

@@ -5,12 +5,14 @@ using TouchScript.Gestures.Simple;
 
 public class DrawerOpen : MonoBehaviour {
 
+	public bool locked = false;
 	private Vector2 lastDrawPosition;
 	private float maxOpenDistance = 0.5f;
 	private float minOpenPosition;
 
 	// Use this for initialization
 	void Start () {
+		if(locked) { maxOpenDistance = 0.01f;}
 		minOpenPosition = transform.localPosition.z;
 		GetComponent<PressGesture>().StateChanged += HandleStateChanged;
 		GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChanged;
@@ -24,14 +26,17 @@ public class DrawerOpen : MonoBehaviour {
 	private void HandlePanStateChanged(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
 		SimplePanGesture gesture = sender as SimplePanGesture;
 		float deltaPosition = 0;
+		float deltaDrawDown = 0;
 		if(e.State == Gesture.GestureState.Began){
 			lastDrawPosition = gesture.ScreenPosition;
 		} else {
+			deltaDrawDown = lastDrawPosition.y - gesture.ScreenPosition.y;
 			deltaPosition = lastDrawPosition.x - gesture.ScreenPosition.x;
 			lastDrawPosition = gesture.ScreenPosition;
 		}
 		if(!float.IsNaN(deltaPosition)){
-			deltaPosition *= 0.01f*Vector3.Dot(transform.right, transform.position-Camera.main.transform.position);
+			deltaPosition *= 0.005f*Vector3.Dot(transform.right, transform.position-Camera.main.transform.position);
+			deltaPosition += 0.005f * deltaDrawDown;
 			deltaPosition = Mathf.Clamp(deltaPosition,
 		                            minOpenPosition-transform.localPosition.z,
 		                            minOpenPosition+maxOpenDistance-transform.localPosition.z);
