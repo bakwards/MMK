@@ -9,6 +9,7 @@ public class DrawerOpen : MonoBehaviour {
 	private Vector2 lastDrawPosition;
 	private float maxOpenDistance = 0.5f;
 	private float minOpenPosition;
+	private float lastDirection = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -50,9 +51,15 @@ public class DrawerOpen : MonoBehaviour {
 			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.01 && locked && !AudioController.Instance.mainAudioSource.isPlaying){
 				//AudioController.Instance.PlaySound();
 			}
-			Debug.Log ("Moving: " + deltaPosition);
+			lastDirection = Mathf.Sign (deltaPosition);
 		}
 		if (e.State == Gesture.GestureState.Recognized)	{
+			if(lastDirection > 0 && minOpenPosition+maxOpenDistance-transform.localPosition.z >= 0.01){
+				Debug.Log("Open");
+			} else if (lastDirection < 0 && minOpenPosition-transform.localPosition.z >= 0.01) {
+				Debug.Log ("Close!");
+			}
+			Debug.Log (minOpenPosition-transform.localPosition.z);
 		}
 	}
 	
