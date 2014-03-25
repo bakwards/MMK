@@ -34,6 +34,7 @@ public class StoryConstruct : MonoBehaviour {
 	private bool pause = false;
 	public bool lookingForFirstStory = true;
 	public tk2dTextMesh textMesh;
+	public Transform[] path;
 
 
 	// Use this for initialization
