@@ -50,6 +50,7 @@ public class DrawerOpen : MonoBehaviour {
 			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.01 && locked && !AudioController.Instance.mainAudioSource.isPlaying){
 				//AudioController.Instance.PlaySound();
 			}
+			Debug.Log ("Moving: " + deltaPosition);
 		}
 		if (e.State == Gesture.GestureState.Recognized)	{
 		}

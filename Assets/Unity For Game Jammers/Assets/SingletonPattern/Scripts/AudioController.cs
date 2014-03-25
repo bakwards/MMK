@@ -47,13 +47,22 @@ public class AudioController : MonoBehaviour
 
     public void PlaySound()
     {
+		mainAudioSource.loop = false;
         mainAudioSource.clip = pickUpCoin;
         mainAudioSource.Play();        
     }
 
 	public void PlayClip(AudioClip clip){
+		mainAudioSource.loop = false;
 		mainAudioSource.clip = clip;
 		mainAudioSource.Play();        
+	}
+
+	public void LoopClip (AudioClip clip)
+	{
+		mainAudioSource.loop = true;
+		mainAudioSource.clip = clip;
+		mainAudioSource.Play();   
 	}
 
     void Start()
