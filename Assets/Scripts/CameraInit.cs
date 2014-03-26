@@ -12,12 +12,15 @@ public class CameraInit : MonoBehaviour {
 		Color newColor = fadePlane.material.color;
 		newColor.a = 1;
 		fadePlane.material.color = newColor;
+		logoSprite.gameObject.SetActive(true);
+		iTween.MoveFrom(logoSprite.gameObject, iTween.Hash("islocal", true, "y", -5, "time", 2.8));
 		cameraControl.smoothFollow.rotationDamping = 300;
 		cameraControl.smoothFollow.heightDamping = 1.1f;
 		cameraControl.smoothFollow.height = 20;
 		cameraControl.smoothFollow.distance = 10;
 		cameraControl.controlTarget.angularDrag = 0.2f;
 		cameraControl.controlTarget.AddTorque(Vector3.up*300);
+		cameraControl.gameObject.GetComponent<BoxCollider>().enabled = false;
 		cameraControl.enabled = false;
 	}
 	
@@ -49,6 +52,7 @@ public class CameraInit : MonoBehaviour {
 				cameraControl.controlTarget.angularDrag = 2;
 				cameraControl.smoothFollow.rotationDamping = 3;
 				cameraControl.enabled = true;
+				cameraControl.gameObject.GetComponent<BoxCollider>().enabled = true;
 				cameraControl.smoothFollow.heightDamping = 4;
 				cameraControl.smoothFollow.distance = 5;
 				this.enabled = false;

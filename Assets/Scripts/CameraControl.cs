@@ -16,6 +16,7 @@ public class CameraControl : MonoBehaviour {
 	public FullscreenTarget fullscreenTarget;
 	public Collider commodeCollider;
 	public GameObject bounceObject;
+	public GameObject backButton;
 
 	public float maxHeightMove;
 	public float minHeightMove;
@@ -142,5 +143,12 @@ public class CameraControl : MonoBehaviour {
 		GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChanged;
 		commodeCollider.enabled = true;
 		bounceObject.SetActive(true);
+	}
+
+	public void SetFollowState(bool b){
+		GetComponent<SmoothFollow>().enabled = b;
+		GetComponent<BoxCollider>().enabled = b;
+		backButton.SetActive(!b);
+
 	}
 }

@@ -11,7 +11,7 @@ public class DrawerOpen : MonoBehaviour {
 	private float minOpenPosition;
 	private float lastDirection = 0;
 
-	// Use this for initialization
+	// Use this for initialization 
 	void Start () {
 		if(locked) { maxOpenDistance = 0.02f;}
 		minOpenPosition = transform.localPosition.z;
@@ -43,12 +43,15 @@ public class DrawerOpen : MonoBehaviour {
 		                            minOpenPosition+maxOpenDistance-transform.localPosition.z);
 			Vector3 newPosition = transform.position + transform.forward*deltaPosition;
 			rigidbody.MovePosition(newPosition);
-			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.01 && transform.FindChild("StoryController")){
+			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.01 && transform.FindChild("StoryController") && lastDirection > 0){
 				transform.FindChild("StoryController").gameObject.SetActive(true);
-				Camera.main.GetComponent<CameraControl>().ZoomIn();
-				Camera.main.GetComponent<CameraControl>().enabled = false;
-				Camera.main.GetComponent<SmoothFollow>().enabled = false;
-				iTween.MoveTo(Camera.main.gameObject, iTween.Hash("path", transform.FindChild("StoryController").GetComponent<StoryConstruct>().path, "time", 5, "looktarget", transform.FindChild("StoryController").gameObject.transform));
+				transform.FindChild("StoryController").GetComponent<StoryConstruct>().originalParent = gameObject;
+				//Camera.main.GetComponent<CameraControl>().enabled = false;
+				Camera.main.GetComponent<CameraControl>().SetFollowState(false);
+				iTween.MoveTo(Camera.main.gameObject, iTween.Hash("path", transform.FindChild("StoryController").GetComponent<StoryConstruct>().path,
+				                                                  "time", 5,
+				                                                  "looktarget", transform.FindChild("StoryController").gameObject.transform.FindChild("Focuspoint").gameObject.transform,
+				                                                  "easetype", iTween.EaseType.easeInOutSine));
 				transform.FindChild("StoryController").parent = null;
 			}
 			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.01 && locked && !AudioController.Instance.mainAudioSource.isPlaying){
@@ -64,10 +67,5 @@ public class DrawerOpen : MonoBehaviour {
 			}
 			Debug.Log (minOpenPosition-transform.localPosition.z);
 		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }

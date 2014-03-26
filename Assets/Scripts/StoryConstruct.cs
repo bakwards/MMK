@@ -31,6 +31,7 @@ public class StoryConstruct : MonoBehaviour {
 	private int segmentNum;
 	public int storyNum;
 
+	public GameObject originalParent;
 	private bool pause = false;
 	public bool lookingForFirstStory = true;
 	public tk2dTextMesh textMesh;
