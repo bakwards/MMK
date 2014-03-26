@@ -52,7 +52,9 @@ public class DrawerOpen : MonoBehaviour {
 				iTween.MoveTo(Camera.main.gameObject, iTween.Hash("path", transform.FindChild("StoryController").GetComponent<StoryConstruct>().path,
 				                                                  "time", 5,
 				                                                  "looktarget", transform.FindChild("StoryController").gameObject.transform.FindChild("Focuspoint").gameObject.transform,
-				                                                  "easetype", iTween.EaseType.easeInOutSine));
+				                                                  "easetype", iTween.EaseType.easeInOutSine,
+				                                                  "oncompletetarget", gameObject,
+				                                                  "oncomplete", "TestFunction"));
 				transform.FindChild("StoryController").parent = null;
 			}
 			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.01 && locked && !AudioController.Instance.mainAudioSource.isPlaying){
@@ -68,5 +70,8 @@ public class DrawerOpen : MonoBehaviour {
 			}
 			Debug.Log (minOpenPosition-transform.localPosition.z);
 		}
+	}
+	void TestFunction(){
+		Debug.Log("Done!");
 	}
 }
