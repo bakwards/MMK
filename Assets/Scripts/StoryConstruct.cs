@@ -165,7 +165,7 @@ public class StoryConstruct : MonoBehaviour {
 		}
 	}
 
-	void UpdatePage(PageSegment page){
+	public void UpdatePage(PageSegment page){
 		string newString = page.pageText;
 		foreach(int c in page.characters){
 			string stringCheck = "C"+c;

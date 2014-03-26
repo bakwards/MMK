@@ -46,6 +46,7 @@ public class DrawerOpen : MonoBehaviour {
 			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.01 && transform.FindChild("StoryController") && lastDirection > 0){
 				transform.FindChild("StoryController").gameObject.SetActive(true);
 				transform.FindChild("StoryController").GetComponent<StoryConstruct>().originalParent = gameObject;
+				transform.FindChild("StoryController").GetComponent<StoryConstruct>().UpdatePage(transform.FindChild("StoryController").GetComponent<StoryConstruct>().pageSegments[0]);
 				//Camera.main.GetComponent<CameraControl>().enabled = false;
 				Camera.main.GetComponent<CameraControl>().SetFollowState(false);
 				iTween.MoveTo(Camera.main.gameObject, iTween.Hash("path", transform.FindChild("StoryController").GetComponent<StoryConstruct>().path,
