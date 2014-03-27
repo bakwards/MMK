@@ -72,6 +72,6 @@ public class DrawerOpen : MonoBehaviour {
 		}
 	}
 	void TestFunction(){
-		Debug.Log("Done!");
+		//Debug.Log("Done!");
 	}
 }
