@@ -14,6 +14,7 @@ public class GoBackButton : MonoBehaviour {
 		if (e.State == Gesture.GestureState.Recognized)	{
 			iTween.Stop();
 			Camera.main.GetComponent<CameraControl>().SetFollowState(true);
+			storyConstruct.originalParent.GetComponent<DrawerOpen>().CloseDrawer();
 			storyConstruct.RestartStory();
 			storyConstruct.textMesh.text = " ";
 			storyConstruct.transform.parent = storyConstruct.originalParent.transform;

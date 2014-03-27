@@ -153,7 +153,12 @@ public class CameraControl : MonoBehaviour {
 	public void SetFollowState(bool b){
 		GetComponent<SmoothFollow>().enabled = b;
 		GetComponent<BoxCollider>().enabled = b;
-		backButton.SetActive(!b);
+		if(b){
+			backButton.SetActive(!b);
+		}
 
+	}
+	public void SetBackButtonActive(bool b){
+		backButton.SetActive(b);
 	}
 }
