@@ -18,6 +18,7 @@ public class GoBackButton : MonoBehaviour {
 			storyConstruct.textMesh.text = " ";
 			storyConstruct.transform.parent = storyConstruct.originalParent.transform;
 			storyConstruct.gameObject.SetActive(false);
+			storyConstruct.SetAmbience("Ambiens_clock");
 		}
 	}
 }

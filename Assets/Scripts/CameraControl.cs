@@ -136,6 +136,7 @@ public class CameraControl : MonoBehaviour {
 		GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChangedSearch;
 		commodeCollider.enabled = false;
 		bounceObject.SetActive(false);
+		AudioController.Instance.PlayClip((AudioClip)Resources.Load("Audio/SoundFX/Swish"));
 	}
 	void ZoomOut(){
 		GetComponent<TapGesture>().StateChanged -= HandleTapStateChangedOut;
@@ -146,6 +147,7 @@ public class CameraControl : MonoBehaviour {
 		GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChanged;
 		commodeCollider.enabled = true;
 		bounceObject.SetActive(true);
+		AudioController.Instance.PlayClip((AudioClip)Resources.Load("Audio/SoundFX/Swish"));
 	}
 
 	public void SetFollowState(bool b){
