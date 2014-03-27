@@ -184,6 +184,7 @@ public class StoryConstruct : MonoBehaviour {
 			string stringCheck = "T"+t;
 			newString = newString.Replace(stringCheck, objects[t]);
 		}
+		SetAmbience(locations[page.location]);
 		newString = newString.Replace("L"+page.location, locations[page.location]);
 		//Debug.Log (newString);
 		textMesh.text = newString;
