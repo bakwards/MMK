@@ -11,15 +11,18 @@ public class DrawerOpen : MonoBehaviour {
 	private float minOpenPosition;
 	private float lastDirection = 0;
 	private SphereCollider[] colliders;
+	private StoryConstruct storyConstruct;
 
 	// Use this for initialization 
 	void Start () {
+		if(transform.FindChild("StoryController")){
+			storyConstruct = transform.FindChild("StoryController").GetComponent<StoryConstruct>();
+		}
 		colliders = transform.GetComponentsInChildren<SphereCollider>();
 		if(locked) { maxOpenDistance = 0.02f;}
 		minOpenPosition = transform.localPosition.z;
 		GetComponent<TapGesture>().StateChanged += HandleStateChanged;
 		GetComponent<SimplePanGesture>().StateChanged += HandlePanStateChanged;
-	
 	}
 	
 	private void HandleStateChanged(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
@@ -66,7 +69,7 @@ public class DrawerOpen : MonoBehaviour {
 			}
 			lastDirection = Mathf.Sign (deltaPosition);
 		}
-		if (e.State == Gesture.GestureState.Recognized && !locked)	{
+		if (e.State == Gesture.GestureState.Recognized && !locked && iTween.Count() == 0)	{
 			if(lastDirection > 0 && minOpenPosition+maxOpenDistance-transform.localPosition.z >= 0.001){
 				OpenDrawer();
 			}
@@ -76,14 +79,13 @@ public class DrawerOpen : MonoBehaviour {
 		}
 	}
 	void ActivateStoryController(){
-		transform.FindChild("StoryController").gameObject.SetActive(true);
-		transform.FindChild("StoryController").GetComponent<StoryConstruct>().originalParent = gameObject;
-		transform.FindChild("StoryController").GetComponent<StoryConstruct>().UpdatePage(transform.FindChild("StoryController").GetComponent<StoryConstruct>().pageSegments[0]);
-		transform.FindChild("StoryController").parent = null;
+		storyConstruct.gameObject.SetActive(true);
+		storyConstruct.UpdatePage(transform.FindChild("StoryController").GetComponent<StoryConstruct>().pageSegments[0]);
+		storyConstruct.transform.parent = null;
+		Camera.main.GetComponent<CameraControl>().SetBackButtonActive(true);
 	}
 	void MoveCameraToStory(){
-		if(transform.FindChild("StoryController")){
-			//Camera.main.GetComponent<CameraControl>().enabled = false;
+		if(transform.FindChild("StoryController") && iTween.Count () == 0){
 			Camera.main.GetComponent<CameraControl>().SetFollowState(false);
 			iTween.MoveTo(Camera.main.gameObject, iTween.Hash("path", transform.FindChild("StoryController").GetComponent<StoryConstruct>().path,
 			                                                  "time", 5,
@@ -94,6 +96,7 @@ public class DrawerOpen : MonoBehaviour {
 		}
 	}
 	void OpenDrawer(){
+		AudioController.Instance.PlayClip((AudioClip)Resources.Load("Audio/SoundFX/Drawer_open_from_closed"));
 		foreach(SphereCollider c in colliders){
 			c.enabled = false;
 		}
@@ -102,19 +105,29 @@ public class DrawerOpen : MonoBehaviour {
 	IEnumerator OpenDrawerCoroutine(){
 		while(true){
 			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.001){
-				yield break;
-			} else {
 				foreach(SphereCollider c in colliders){
 					c.enabled = true;
 				}
 				MoveCameraToStory();
 				AudioController.Instance.PlayClip((AudioClip)Resources.Load("Audio/SoundFX/Drawer_fully_open"));
+				yield break;
+			} else {
 				transform.position += transform.forward * Time.deltaTime;
 				yield return null;
 			}
 		}
 	}
-	void CloseDrawer(){
+	public void CloseDrawer(){
+		AudioController.Instance.PlayClip((AudioClip)Resources.Load("Audio/SoundFX/Drawer_open_from_closed"));
+		if(storyConstruct != null){
+			iTween.Stop();
+			Camera.main.GetComponent<CameraControl>().SetFollowState(true);
+			storyConstruct.RestartStory();
+			storyConstruct.textMesh.text = " ";
+			storyConstruct.transform.parent = storyConstruct.originalParent.transform;
+			storyConstruct.gameObject.SetActive(false);
+			storyConstruct.SetAmbience("Ambiens_clock");
+		}
 		foreach(SphereCollider c in colliders){
 			c.enabled = false;
 		}
@@ -123,15 +136,16 @@ public class DrawerOpen : MonoBehaviour {
 	IEnumerator CloseDrawerCoroutine(){
 		while(true){
 			if(minOpenPosition-transform.localPosition.z > -0.001){
-				yield break;
-			} else {
 				foreach(SphereCollider c in colliders){
 					c.enabled = true;
 				}
 				AudioController.Instance.PlayClip((AudioClip)Resources.Load("Audio/SoundFX/Drawer_fully_open"));
+				yield break;
+			} else {
 				transform.position -= transform.forward * Time.deltaTime;
 				yield return null;
 			}
 		}
 	}
+
 }

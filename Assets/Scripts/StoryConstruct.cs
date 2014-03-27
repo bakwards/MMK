@@ -38,14 +38,17 @@ public class StoryConstruct : MonoBehaviour {
 	public tk2dTextMesh textMesh;
 	public Transform[] path;
 
-
-	// Use this for initialization
-	void Start () {
+	void Awake(){
+		originalParent = transform.parent.gameObject;
+		if(!gameObject.GetComponent<AudioSource>()){
+			audioSource = gameObject.AddComponent<AudioSource>();
+		} else {
+			audioSource = gameObject.GetComponent<AudioSource>();
+		}
 		Transform storyGraphics = transform.FindChild("StoryGraphics").transform;
 		characterGraphics = storyGraphics.FindChild("Characters").transform.GetComponentsInChildren<ClickStoryElement>() as ClickStoryElement[];
 		locationGraphics = storyGraphics.FindChild("Locations").transform.GetComponentsInChildren<ClickStoryElement>() as ClickStoryElement[];
 		thingGraphics = storyGraphics.FindChild("Things").transform.GetComponentsInChildren<ClickStoryElement>() as ClickStoryElement[];
-		GeneratePageContent();
 		chars = new StoryElement[characters.Length];
 		objs = new StoryElement[objects.Length];
 		locs = new StoryElement[locations.Length];
@@ -70,12 +73,13 @@ public class StoryConstruct : MonoBehaviour {
 			objs[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
 			i++;
 		}
-		if(!gameObject.GetComponent<AudioSource>()){
-			audioSource = gameObject.AddComponent<AudioSource>();
-		} else {
-			audioSource = gameObject.GetComponent<AudioSource>();
-		}
 		storyClips = Resources.LoadAll<AudioClip>("Audio/" + storyName + "/Story");
+		gameObject.SetActive(false);
+	}
+
+
+	// Use this for initialization
+	void Start () {
 		gameObject.SetActive(debugActive);
 		UpdatePage(pageSegments[currentPage]);
 		GeneratePageContent();
@@ -119,7 +123,9 @@ public class StoryConstruct : MonoBehaviour {
 			break;
 		}
 		nextSegment.title = audioSource.clip.name;
-		audioSource.Play();
+		if(gameObject.activeSelf){
+			audioSource.Play();
+		}
 		segmentNum++;
 	}
 	
@@ -220,7 +226,9 @@ public class StoryConstruct : MonoBehaviour {
 		firstStoryOnPage = 0;
 		storyNum = 0;
 		segmentNum = 0;
-		audioSource.Stop();
+		if(audioSource.isPlaying){
+			audioSource.Stop();
+		}
 		pause = false;
 		NextClip();
 		GeneratePageContent();
