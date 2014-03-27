@@ -6,9 +6,11 @@ public class CameraInit : MonoBehaviour {
 	public CameraControl cameraControl;
 	public MeshRenderer fadePlane;
 	public SpriteRenderer logoSprite;
+	public AudioClip introSound;
 
 	// Use this for initialization
 	void Start () {
+		AudioController.Instance.PlayClip(introSound);
 		Color newColor = fadePlane.material.color;
 		newColor.a = 1;
 		fadePlane.material.color = newColor;

@@ -5,6 +5,7 @@ using tk2dRuntime;
 public class StoryConstruct : MonoBehaviour {
 
 	public bool debugActive;
+	public AudioSource ambienceSource;
 
 	public string storyName;
 
@@ -78,6 +79,7 @@ public class StoryConstruct : MonoBehaviour {
 		gameObject.SetActive(debugActive);
 		UpdatePage(pageSegments[currentPage]);
 		GeneratePageContent();
+		SetAmbience(locations[0]);
 	}
 	
 	// Update is called once per frame
@@ -155,6 +157,7 @@ public class StoryConstruct : MonoBehaviour {
 		case "Locations":
 			locs[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
 			locations[i] = newElement;
+			SetAmbience(newElement);
 			break;
 		case "Things":
 			objs[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
@@ -206,7 +209,13 @@ public class StoryConstruct : MonoBehaviour {
 		}
 	}
 
+	public void SetAmbience(string name){
+		ambienceSource.clip = (AudioClip)Resources.Load("Audio/SoundFX/" + name);
+		ambienceSource.Play();
+	}
+
 	public void RestartStory(){
+		SetAmbience(locations[0]);
 		currentPage = 0;
 		firstStoryOnPage = 0;
 		storyNum = 0;

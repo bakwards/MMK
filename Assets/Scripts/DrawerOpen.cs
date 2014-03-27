@@ -43,30 +43,38 @@ public class DrawerOpen : MonoBehaviour {
 		                            minOpenPosition+maxOpenDistance-transform.localPosition.z);
 			Vector3 newPosition = transform.position + transform.forward*deltaPosition;
 			rigidbody.MovePosition(newPosition);
-			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.01 && transform.FindChild("StoryController") && lastDirection > 0){
-				transform.FindChild("StoryController").gameObject.SetActive(true);
-				transform.FindChild("StoryController").GetComponent<StoryConstruct>().originalParent = gameObject;
-				transform.FindChild("StoryController").GetComponent<StoryConstruct>().UpdatePage(transform.FindChild("StoryController").GetComponent<StoryConstruct>().pageSegments[0]);
-				//Camera.main.GetComponent<CameraControl>().enabled = false;
-				Camera.main.GetComponent<CameraControl>().SetFollowState(false);
-				iTween.MoveTo(Camera.main.gameObject, iTween.Hash("path", transform.FindChild("StoryController").GetComponent<StoryConstruct>().path,
-				                                                  "time", 5,
-				                                                  "looktarget", transform.FindChild("StoryController").gameObject.transform.FindChild("Focuspoint").gameObject.transform,
-				                                                  "easetype", iTween.EaseType.easeInOutSine,
-				                                                  "oncompletetarget", gameObject,
-				                                                  "oncomplete", "TestFunction"));
-				transform.FindChild("StoryController").parent = null;
+			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.001 && !locked && lastDirection > 0){
+				AudioController.Instance.PlayClip((AudioClip)Resources.Load("Audio/SoundFX/Drawer_fully_open"));
+				if(transform.FindChild("StoryController")){
+					transform.FindChild("StoryController").gameObject.SetActive(true);
+					transform.FindChild("StoryController").GetComponent<StoryConstruct>().originalParent = gameObject;
+					transform.FindChild("StoryController").GetComponent<StoryConstruct>().UpdatePage(transform.FindChild("StoryController").GetComponent<StoryConstruct>().pageSegments[0]);
+					//Camera.main.GetComponent<CameraControl>().enabled = false;
+					Camera.main.GetComponent<CameraControl>().SetFollowState(false);
+					iTween.MoveTo(Camera.main.gameObject, iTween.Hash("path", transform.FindChild("StoryController").GetComponent<StoryConstruct>().path,
+					                                                  "time", 5,
+					                                                  "looktarget", transform.FindChild("StoryController").gameObject.transform.FindChild("Focuspoint").gameObject.transform,
+					                                                  "easetype", iTween.EaseType.easeInOutSine,
+					                                                  "oncompletetarget", gameObject,
+					                                                  "oncomplete", "TestFunction"));
+					transform.FindChild("StoryController").parent = null;
+				}
+			}
+			if(minOpenPosition-transform.localPosition.z > -0.001 && !locked){
+				if(lastDirection < 0){
+					AudioController.Instance.PlayClip((AudioClip)Resources.Load("Audio/SoundFX/Drawer_fully_open"));
+				} else if (lastDirection > 0){
+					AudioController.Instance.PlayClip((AudioClip)Resources.Load("Audio/SoundFX/Drawer_open_from_closed"));
+				}
 			}
 			if(minOpenPosition+maxOpenDistance-transform.localPosition.z < 0.01 && locked && !AudioController.Instance.mainAudioSource.isPlaying){
-				//AudioController.Instance.PlaySound();
+				AudioController.Instance.PlayClip((AudioClip)Resources.Load("Audio/SoundFX/Drawer_locked"));
 			}
 			lastDirection = Mathf.Sign (deltaPosition);
 		}
 		if (e.State == Gesture.GestureState.Recognized)	{
 			if(lastDirection > 0 && minOpenPosition+maxOpenDistance-transform.localPosition.z >= 0.01){
-				Debug.Log("Open");
 			} else if (lastDirection < 0 && minOpenPosition-transform.localPosition.z >= 0.01) {
-				Debug.Log ("Close!");
 			}
 			Debug.Log (minOpenPosition-transform.localPosition.z);
 		}

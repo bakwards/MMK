@@ -19,6 +19,7 @@ public class ElementButtonBehaviour : MonoBehaviour {
 
 	private void HandleStateChanged(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
 		if (e.State == Gesture.GestureState.Recognized)	{
+			AudioController.Instance.PlayClip((AudioClip)Resources.Load ("Audio/SoundFX/Blop"));
 			elementSelector.GetComponent<ElementSelector>().SetNew(GetComponent<SpriteRenderer>().sprite);
 			elementSelector.SetActive(false);
 		}

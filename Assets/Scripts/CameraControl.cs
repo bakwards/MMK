@@ -48,6 +48,9 @@ public class CameraControl : MonoBehaviour {
 				deltaRotation = Mathf.Clamp(deltaRotation, -20, 20);
 				controlTarget.MoveRotation(controlTarget.rotation * Quaternion.Euler(0, deltaRotation, 0));
 			}
+			if(e.State == Gesture.GestureState.Recognized){
+				AudioController.Instance.PlayClip((AudioClip)Resources.Load("Audio/SoundFX/Swish"));
+			}
 		}
 	}
 	private void HandlePanStateChangedSearch(object sender, TouchScript.Events.GestureStateChangeEventArgs e){
