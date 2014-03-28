@@ -86,11 +86,13 @@ public class DrawerOpen : MonoBehaviour {
 	}
 	void MoveCameraToStory(){
 		if(transform.FindChild("StoryController") && iTween.Count () == 0){
+			GameObject currentStoryToStart = transform.FindChild("StoryController").gameObject;
 			AudioController.Instance.PlayClip((AudioClip)Resources.Load("Audio/SoundFX/Storyintro"),true);
 			Camera.main.GetComponent<CameraControl>().SetFollowState(false);
+			Camera.main.GetComponent<CameraControl>().backButton.GetComponent<GoBackButton>().storyConstruct = currentStoryToStart.GetComponent<StoryConstruct>();
 			iTween.MoveTo(Camera.main.gameObject, iTween.Hash("path", transform.FindChild("StoryController").GetComponent<StoryConstruct>().path,
 			                                                  "time", 5,
-			                                                  "looktarget", transform.FindChild("StoryController").gameObject.transform.FindChild("Focuspoint").gameObject.transform,
+			                                                  "looktarget", currentStoryToStart.transform.FindChild("Focuspoint").gameObject.transform,
 			                                                  "easetype", iTween.EaseType.easeInOutSine,
 			                                                  "oncompletetarget", gameObject,
 			                                                  "oncomplete", "ActivateStoryController"));
