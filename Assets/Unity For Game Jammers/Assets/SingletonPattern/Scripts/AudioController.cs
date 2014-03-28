@@ -40,6 +40,7 @@ public class AudioController : MonoBehaviour
 
     public AudioClip pickUpCoin;
     public AudioSource mainAudioSource;
+	private bool important;
 
     void Init()
     {
@@ -51,11 +52,16 @@ public class AudioController : MonoBehaviour
         mainAudioSource.clip = pickUpCoin;
         mainAudioSource.Play();        
     }
-
-	public void PlayClip(AudioClip clip){
-		mainAudioSource.loop = false;
-		mainAudioSource.clip = clip;
-		mainAudioSource.Play();        
+	
+	public void PlayClip(AudioClip clip, bool impo = false){
+		if(!important){
+			mainAudioSource.loop = false;
+			mainAudioSource.clip = clip;
+			mainAudioSource.Play();   
+		}
+		if(impo){
+			important = true;
+		}
 	}
 
 	public void LoopClip (AudioClip clip)
@@ -65,7 +71,9 @@ public class AudioController : MonoBehaviour
 		mainAudioSource.Play();   
 	}
 
-    void Start()
-    {
-    }
+	void Update(){
+		if(important && !mainAudioSource.isPlaying){
+			important = false;
+		}
+	}
 }

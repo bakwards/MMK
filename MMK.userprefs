@@ -1,14 +1,18 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\DrawerOpen.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\StoryConstruct.cs">
     <Files>
-      <File FileName="Assets\Scripts\DrawerOpen.cs" Line="75" Column="5" />
-      <File FileName="Assets\Tester.cs" Line="18" Column="88" />
-      <File FileName="Assets\Scripts\CameraInit.cs" Line="11" Column="17" />
-      <File FileName="Assets\Scripts\StoryConstruct.cs" Line="160" Column="65" />
-      <File FileName="Assets\Scripts\CameraControl.cs" Line="133" Column="80" />
-      <File FileName="Assets\Scripts\GoBackButton.cs" Line="20" Column="47" />
+      <File FileName="Assets\Scripts\CameraInit.cs" Line="1" Column="1" />
+      <File FileName="Assets\Tester.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\CameraInit.cs" Line="12" Column="17" />
+      <File FileName="Assets\Scripts\CameraControl.cs" Line="156" Column="9" />
+      <File FileName="Assets\Scripts\GoBackButton.cs" Line="18" Column="34" />
       <File FileName="Assets\Standard Assets\Scripts\Camera Scripts\SmoothFollow.js" Line="1" Column="1" />
+      <File FileName="Assets\Unity For Game Jammers\Assets\SingletonPattern\Scripts\AudioController.cs" Line="53" Column="6" />
+      <File FileName="Assets\Scripts\ClickStoryElement.cs" Line="20" Column="4" />
+      <File FileName="Assets\Scripts\ElementButtonBehaviour.cs" Line="22" Column="88" />
+      <File FileName="Assets\Scripts\StoryConstruct.cs" Line="187" Column="39" />
+      <File FileName="Assets\Scripts\DrawerOpen.cs" Line="85" Column="71" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

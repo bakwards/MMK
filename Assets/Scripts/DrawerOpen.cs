@@ -86,6 +86,7 @@ public class DrawerOpen : MonoBehaviour {
 	}
 	void MoveCameraToStory(){
 		if(transform.FindChild("StoryController") && iTween.Count () == 0){
+			AudioController.Instance.PlayClip((AudioClip)Resources.Load("Audio/SoundFX/Storyintro"),true);
 			Camera.main.GetComponent<CameraControl>().SetFollowState(false);
 			iTween.MoveTo(Camera.main.gameObject, iTween.Hash("path", transform.FindChild("StoryController").GetComponent<StoryConstruct>().path,
 			                                                  "time", 5,
