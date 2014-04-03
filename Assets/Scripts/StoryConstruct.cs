@@ -54,21 +54,21 @@ public class StoryConstruct : MonoBehaviour {
 		locs = new StoryElement[locations.Length];
 		int i = 0;
 		foreach(string c in characters){
-			string audioPath = "Audio/" + storyName + "/Characters/" + c;
+			string audioPath = "Audio/Characters/" + c;
 			chars[i] = new StoryElement();
 			chars[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
 			i++;
 		}
 		i = 0;
 		foreach(string l in locations){
-			string audioPath = "Audio/" + storyName + "/Locations/" + l;
+			string audioPath = "Audio/Locations/" + l;
 			locs[i] = new StoryElement();
 			locs[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
 			i++;
 		}
 		i = 0;
 		foreach(string o in objects){
-			string audioPath = "Audio/" + storyName + "/Things/" + o;
+			string audioPath = "Audio/Things/" + o;
 			objs[i] = new StoryElement();
 			objs[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
 			i++;
@@ -154,7 +154,7 @@ public class StoryConstruct : MonoBehaviour {
 	}
 
 	public void ChangeElement(int i, string newElement, string type){ //change element, not character - take sprite parent name as argument
-		string audioPath = "Audio/" + storyName + "/" + type + "/" + newElement;
+		string audioPath = "Audio/" + type + "/" + newElement;
 		switch (type) {
 		case "Characters":
 			chars[i].audioClips = Resources.LoadAll<AudioClip>(audioPath);
